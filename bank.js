@@ -16,36 +16,32 @@ class Account{
         }
         accountDetailsList.push(this)
     }
-    interest(rateOfInterest,time){
-        let interest =((this.balance * rateOfInterest * time)/365) ;
-        this.balance += interest;
-        console.log("Interest = ", interest)
-        console.log("Balance = ", this.balance)
-    }
-    
+    //print individual account details
     printAccountDetails(){
-        console.log(this);
-    }
-    printBalance(){
-        console.log("Account balance is " + this.balance)
+        console.log(this)
     }
     
 }
 
 //Deposit & Withdraw from Savings Account(minimum balance = 100 )
 class SavingAccount extends Account{
+    interest(rateOfInterest,time){
+        let interest =((this.balance * rateOfInterest * time)/365) ;    //calculating interest
+        this.balance += interest;
+        console.log("Interest = ", interest)
+    }
     deposit(amount){
         this.balance = this.balance + amount;
         console.log("Deposit of Rs " + amount + "Successful to "+this.accountNumber);
         console.log("Balance of rs "+this.balance+" is available at "+this.accountNumber)
-     }
+    }
  
      withdraw(amount){
          if(amount < this.balance && this.balance >= 100){
             this.balance = this.balance - amount;
             console.log("withdraw of Rs " + amount + "Successful from "+this.accountNumber);
             console.log("Balance of rs "+this.balance+" is available at "+this.accountNumber)
-         }
+        }
          else{
              console.log("Maintain minimum balance\n");
         }
@@ -53,23 +49,23 @@ class SavingAccount extends Account{
      
 }
 
-//Update CurrentAccount (minimum balance = 0)
+//Update CurrentAccount only deposit and withdraw (minimum balance = 0)
 class CurrentAccount extends Account{
     deposit(amount){
         this.balance = this.balance + amount;
         console.log("Deposit of Rs " + amount + "Successful to "+this.accountNumber);
         console.log("Balance of rs "+this.balance+" is available at "+this.accountNumber)
-     }
+    }
  
      withdraw(amount){
          if(amount <= this.balance ){
              this.balance -= amount;
              console.log("withdraw of Rs " + amount + "Successful from "+this.accountNumber);
              console.log("Balance of rs "+this.balance+" is available at "+this.accountNumber)
-         }
+        }
          else{
              console.log("Maintain minimum balance\n");
-         }
+        }
      }
 }
 
@@ -77,10 +73,16 @@ class CurrentAccount extends Account{
 class RecurringDeposit extends Account{
     deposit(amount,time){
         while(time){
-            this.balance = this.balance + amount;
+            this.balance = this.balance + amount ;
             time -= 1;
         }
         
+     }
+     interest(rateOfInterest,time){
+        let interest =((this.balance * rateOfInterest * time)/365) ;
+        this.balance += interest;
+        console.log("Interest earned = "+ interest)
+        console.log("Balance of rs "+this.balance+" is available at "+this.accountNumber)
      }
      
 } 
@@ -88,15 +90,17 @@ class RecurringDeposit extends Account{
 //calulating interest for fd Account
 class FD extends Account{
     interest(rateOfInterest,time){
-        let interest =((this.balance * rateOfInterest * time)/100) ;
-        this.balance += interest;
-        console.log("Interest earned = "+ interest)
+        this.balance =this.balance+(this.balance * rateOfInterest * time) ;
         console.log("Balance of rs "+this.balance+" is available at "+this.accountNumber)
     }
 }
 
-//Updating Loan Accounts
+//Updating Loan Accounts only deposit
 class LoanAccount extends Account{
+    interest(rateOfInterest){
+        let interest =((this.balance * rateOfInterest * 0.1)/1) ;
+        this.balance += interest;
+    }
     deposit(amount){
         if(this.balance >= amount ){
             this.balance = this.balance - amount ;
@@ -107,20 +111,20 @@ class LoanAccount extends Account{
            amount = amount - this.balance;
            console.log("Deposited rs "+ this.balance + " and excess of rs "+amount +" is refunded")
            this.balance = 0
-       }
+        }
        else if(this.balance == 0){
         console.log("loan cleared")
        }
 
-     }
+    }
 }
 
+//print All Account details
 class  AccountManager {
     printAllDetails(){
         console.log("\n Account details of all users " ,accountDetailsList )
     }
 }
-
 
 let vpn = new SavingAccount("vpn",1500,"savings","vpn@gmail.com");
 vpn.deposit(5000);
